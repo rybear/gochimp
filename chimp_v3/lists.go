@@ -79,6 +79,9 @@ func (list ListResponse) CanMakeRequest() error {
 	if list.ID == "" {
 		return errors.New("No ID provided on list")
 	}
+	if list.api == nil {
+		return errors.New("No API reference provided")
+	}
 
 	return nil
 }
@@ -254,8 +257,8 @@ type Client struct {
 }
 
 func (list ListResponse) GetClients(params *BasicQueryParams) (*ListOfClients, error) {
-	if list.ID == "" {
-		return nil, errors.New("No ID provided on list")
+	if err := list.CanMakeRequest(); err != nil {
+		return false, err
 	}
 
 	endpoint := fmt.Sprintf(clients_path, list.ID)
@@ -378,8 +381,8 @@ func (list ListResponse) CreateInterestCategory(body *InterestCategoryRequest) (
 }
 
 func (list ListResponse) UpdateInterestCategory(id string, body *InterestCategoryRequest) (*InterestCategory, error) {
-	if list.ID == "" {
-		return nil, errors.New("No ID provided on list")
+	if err := list.CanMakeRequest(); err != nil {
+		return false, err
 	}
 
 	endpoint := fmt.Sprintf(single_interest_category_path, list.ID, id)
@@ -389,8 +392,8 @@ func (list ListResponse) UpdateInterestCategory(id string, body *InterestCategor
 }
 
 func (list ListResponse) DeleteInterestCategory(id string) (bool, error) {
-	if list.ID == "" {
-		return false, errors.New("No ID provided on list")
+	if err := list.CanMakeRequest(); err != nil {
+		return false, err
 	}
 
 	endpoint := fmt.Sprintf(single_interest_category_path, list.ID, id)

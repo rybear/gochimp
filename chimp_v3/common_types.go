@@ -79,20 +79,19 @@ type Link struct {
 
 // Address represents what it says
 type Address struct {
-	Field1       string `json:"address1"`
-	Field2       string `json:"address2"`
-	City         string `json:"city"`
-	Province     string `json:"province"`
-	ProvinceCode string `json:"province_code"`
-	PostalCode   string `json:"postal_code"`
-	Country      string `json:"country"`
-	CountryCode  string `json:"country_code"`
-	Longitude    int    `json:"longitude"` // is this a float?
-	Latitude     int    `json:"latitude"`  // Is this a float?
+	Field1       string  `json:"address1"`
+	Field2       string  `json:"address2"`
+	City         string  `json:"city"`
+	Province     string  `json:"province"`
+	ProvinceCode string  `json:"province_code"`
+	PostalCode   string  `json:"postal_code"`
+	Country      string  `json:"country"`
+	CountryCode  string  `json:"country_code"`
+	Longitude    float64 `json:"longitude"`
+	Latitude     float64 `json:"latitude"`
 }
 
-// Customer defines a mailchimp customer
-type Customer struct {
+type CustomerCreationRequest struct {
 	ID           string  `json:"id"`
 	EmailAddress string  `json:"email_address"`
 	OptInStatus  bool    `json:"opt_in_status"`
@@ -100,11 +99,17 @@ type Customer struct {
 	FirstName    string  `json:"first_name"`
 	LastName     string  `json:"last_name"`
 	OrdersCount  int     `json:"orders_count"`
-	TotalSpent   int     `json:"total_spent"` // float
+	TotalSpent   float64 `json:"total_spent"`
 	Address      Address `json:"address"`
-	CreatedAt    string  `json:"created_at"`
-	UpdatedAt    string  `json:"updated_at"`
-	Links        []Link  `json:"_links"`
+}
+
+// Customer defines a mailchimp customer
+type Customer struct {
+	CustomerCreationRequest
+	withLinks
+
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 // Contact defines a single contact
